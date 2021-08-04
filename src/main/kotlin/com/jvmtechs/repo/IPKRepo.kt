@@ -1,6 +1,9 @@
 package com.jvmtechs.repo
 
 import com.jvmtechs.model.IPK
+import com.jvmtechs.model.IPKQuery
+import com.jvmtechs.model.Trip
+import com.jvmtechs.model.TripQuery
 import com.jvmtechs.utils.Results
 import okhttp3.OkHttpClient
 import okhttp3.Request
@@ -17,7 +20,7 @@ class IPKRepo : AbstractRepo<IPK>() {
         var session: Session? = null
         return try {
             session = sessionFactory!!.openSession()
-            val strQry = "SELECT * FROM \"tblIncomePerKilometre\"  ORDER  BY \"dtmCreated\" DESC LIMIT 100"
+            val strQry = "SELECT * FROM \"tblIncomePerKilometre\"  ORDER  BY dtmCreated DESC LIMIT 100"
             val data = session!!.createNativeQuery(strQry, IPK::class.java).resultList
             Results.Success(code = Results.Success.CODE.LOAD_SUCCESS, data = data)
 
@@ -91,4 +94,35 @@ class IPKRepo : AbstractRepo<IPK>() {
             session?.close()
         }
     }
+
+    fun queryModel(query: IPKQuery): Results {
+
+        var session: Session? = null
+        var qryStr = "FROM IPK  WHERE deleted=false"
+
+        if (query.fromDate != null && query.toDate != null)
+            qryStr += " AND dtmCreated BETWEEN \'${query.fromDate}\' AND \'${query.toDate}\'"
+
+        qryStr += " ORDER BY dtmCreated DESC"
+
+        return try {
+            session = sessionFactory?.openSession()
+            var data = session
+                ?.createQuery(qryStr, IPK::class.java)
+                ?.resultList
+                ?.filterNotNull()
+            data = if (query.truck != null)
+                data?.filter { it.truck?.id == it.truck?.id }
+            else data
+
+            Results.Success(data = data, code = Results.Success.CODE.LOAD_SUCCESS)
+
+        } catch (e: Exception) {
+            e.printStackTrace()
+            Results.Error(e)
+        } finally {
+            session?.close()
+        }
+    }
+
 }

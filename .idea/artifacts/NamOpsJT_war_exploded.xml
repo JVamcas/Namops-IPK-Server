@@ -1,5 +1,5 @@
 <component name="ArtifactManager">
-  <artifact type="exploded-war" name="NamOps JT Server:war exploded">
+  <artifact type="exploded-war" name="NamOpsJT:war exploded">
     <output-path>$PROJECT_DIR$/target/NamOps-JT-Server-1.0-0</output-path>
     <properties id="maven-jee-properties">
       <options>

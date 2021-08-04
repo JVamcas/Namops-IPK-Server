@@ -2,6 +2,7 @@ package com.jvmtechs.servlet
 
 import com.jvmtechs.model.IPK
 import com.jvmtechs.repo.IPKRepo
+import com.jvmtechs.utils.ParseUtil.Companion.convert
 import com.jvmtechs.utils.ParseUtil.Companion.toJson
 import com.jvmtechs.utils.Results
 import java.time.Duration
@@ -77,7 +78,13 @@ class IPKServlet : AbstractServlet() {
                 when (uri) {
 
                     "/ipk_query" -> {
-
+                        val ipkJsonQuery = req.getParameter("ipk")
+                        val results = ipkRepo.queryModel(query = ipkJsonQuery.convert())
+                        out.print(
+                            if (results is Results.Success<*>)
+                                "{Status:\"Success\",data:${results.data.toJson()}}"
+                            else "{Status:\"Server Error\"}"
+                        )
                     }
                 }
             }

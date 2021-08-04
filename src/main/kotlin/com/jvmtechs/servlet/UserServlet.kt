@@ -10,7 +10,7 @@ import javax.servlet.http.HttpServletRequest
 import javax.servlet.http.HttpServletResponse
 
 
-@WebServlet(name = "user-servlet", value = ["/users_fetch_all", "/user_add_update"])
+@WebServlet(name = "user-servlet", value = ["/users_fetch_all", "/user_add_update", "/authenticate"])
 class UserServlet : AbstractServlet() {
 
     private lateinit var userRepo: UserRepo
@@ -29,6 +29,15 @@ class UserServlet : AbstractServlet() {
                     val loadRes = userRepo.loadAll()
                     if (loadRes is Results.Success<*>) {
                         val data = loadRes.data as ArrayList<User>
+                        out.print("{Status:\"Success\",data: ${data.toJson()}}")
+                    } else out.print("{Status: \"Server Error\"}")
+                }
+                "/authenticate" -> {
+                    val username = req.getParameter("username")
+                    val password = req.getParameter("password")
+                    val loadRes = userRepo.authenticate(userName = username, password = password)
+                    if (loadRes is Results.Success<*>) {
+                        val data = loadRes.data as? User
                         out.print("{Status:\"Success\",data: ${data.toJson()}}")
                     } else out.print("{Status: \"Server Error\"}")
                 }

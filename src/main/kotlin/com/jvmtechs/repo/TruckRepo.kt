@@ -11,7 +11,7 @@ class TruckRepo : AbstractRepo<Truck>() {
         var session: Session? = null
         return try {
             session = sessionFactory!!.openSession()
-            val data = session!!.createQuery("FROM Truck WHERE deleted=FALSE", Truck::class.java).resultList
+            val data = session!!.createQuery("FROM Truck WHERE deleted=FALSE ORDER BY fleetNo", Truck::class.java).resultList
             Results.Success(code = Results.Success.CODE.LOAD_SUCCESS, data = data)
 
         } catch (e: Exception) {

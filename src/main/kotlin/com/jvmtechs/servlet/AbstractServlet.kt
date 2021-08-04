@@ -29,11 +29,16 @@ abstract class AbstractServlet: HttpServlet() {
 
     fun HttpServletRequest.validate(resp: HttpServletResponse): Boolean {
         val passcode = this.getParameter("password") ?: ""
-        val surname = this.getParameter("username") ?: ""
+        val username = this.getParameter("username") ?: ""
+
+        if(passcode.trim().isEmpty() || username.trim().isEmpty()) {
+            out.print("{Status: \"Invalid Auth\"}")
+            return false
+        }
         val out = resp.writer
 
         return try {
-            when (val result = UserRepo().authenticate(userName = surname, password = passcode)) {
+            when (val result = UserRepo().authenticate(userName = username, password = passcode)) {
                 is Results.Success<*> -> {
                     val validated = !(result.data as? ArrayList<User>).isNullOrEmpty()
                     if (!validated)

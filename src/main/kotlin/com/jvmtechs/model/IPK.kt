@@ -39,3 +39,11 @@ class IPK {
 
     var deleted = false
 }
+
+class IPKQuery{
+
+    var toDate: LocalDateTime? = null
+    var fromDate: LocalDateTime? = null
+    var truck: Truck? = null
+}
+

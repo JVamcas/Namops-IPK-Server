@@ -24,10 +24,10 @@ class Trip {
     @GeneratedValue(generator = "trip_seq_generator")
     var id: Int? = null
 
-    @Column(name = "\"dtmStarted\"", nullable = false)
+    @Column(name = "\"dtmStarted\"", nullable = true)
     var dtmStarted : LocalDateTime? = null
 
-    @Column(name = "\"dtmCompleted\"", nullable = false)
+    @Column(name = "\"dtmCompleted\"", nullable = true)
     var dtmCompleted : LocalDateTime? = null
 
     @ManyToOne(fetch = FetchType.EAGER, cascade = [CascadeType.ALL])
@@ -42,18 +42,31 @@ class Trip {
     @JoinColumn(name = "tripLog")
     var containerList = mutableSetOf<Container>()
 
-    @Column(name = "\"description\"", nullable = false)
+    @Column(name = "\"description\"", nullable = true)
     var description : String? = null
 
-    @Column(name = "\"memo\"", nullable = false)
+    @Column(name = "\"memo\"", nullable = true)
     var memo : String? = null
 
-    @Column(name = "\"pickUpLocation\"", nullable = false)
+    @Column(name = "\"pickUpLocation\"", nullable = true)
     var pickUpLocation : String? = null
 
-    @Column(name = "\"deliveryLocation\"", nullable = false)
+    @Column(name = "\"deliveryLocation\"", nullable = true)
     var deliveryLocation : String? = null
 
     var deleted = false
+
+    @Column(name = "\"priceLessTax\"", nullable = true)
+    var priceLessTax: Float? = null
+
+}
+
+class TripQuery{
+
+    var toDate: LocalDateTime? = null
+    var fromDate: LocalDateTime? = null
+    var truck: Truck? = null
+    var driver: User? = null
+    var containerNo: String? = null
 
 }

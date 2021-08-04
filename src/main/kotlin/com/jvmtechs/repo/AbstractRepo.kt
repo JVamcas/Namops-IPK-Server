@@ -1,6 +1,7 @@
 package com.jvmtechs.repo
 
 import com.jvmtechs.model.IPK
+import com.jvmtechs.model.Job
 import com.jvmtechs.utils.Results
 import com.jvmtechs.utils.SessionManager
 import org.hibernate.Session
@@ -30,19 +31,21 @@ abstract class AbstractRepo<T> {
         }
     }
 
-    fun batchUpdate(transactions: List<IPK>) {
+    open fun batchUpdate(transactions: List<T>): Results {
         var trans: Transaction? = null
         var session: Session? = null
-        try {
+        return try {
             session = sessionFactory?.openSession()
             trans = session?.beginTransaction()
             transactions.forEach {
                 session?.saveOrUpdate(it)
             }
             trans?.commit()
+            Results.Success(data = transactions, code = Results.Success.CODE.WRITE_SUCCESS)
         } catch (e: Exception) {
             e.printStackTrace()
             trans?.rollback()
+            Results.Error(e)
         } finally {
             session?.close()
         }

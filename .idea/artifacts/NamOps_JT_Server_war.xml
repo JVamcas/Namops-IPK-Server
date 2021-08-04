@@ -8,7 +8,7 @@
       </options>
     </properties>
     <root id="archive" name="NamOps-JT-Server-1.0-0.war">
-      <element id="artifact" artifact-name="NamOps JT Server:war exploded" />
+      <element id="artifact" artifact-name="NamOpsJT:war exploded" />
     </root>
   </artifact>
 </component>

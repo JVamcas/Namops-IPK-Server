@@ -11,18 +11,16 @@ class UserRepo : AbstractRepo<User>() {
         return try {
             session = sessionFactory!!.openSession()
             val data = session!!.createQuery(
-                "FROM User where LOWER(username)=:username AND password=:password AND deleted=FALSE",
-                User::class.java
-            )
+                "FROM User where LOWER(username)=:username AND password=:password AND deleted=FALSE", User::class.java)
                 .setParameter("username", userName)
                 .setParameter("password", password)
                 .resultList.filterNotNull()
-            data.firstOrNull()
+            val user = data.firstOrNull()
                 ?.apply {
                     this.username = null
                     this.password = null
                 }
-            Results.Success(code = Results.Success.CODE.LOAD_SUCCESS, data = data)
+            Results.Success(code = Results.Success.CODE.LOAD_SUCCESS, data = user)
         } catch (e: Exception) {
             Results.Error(e)
         } finally {
@@ -34,7 +32,7 @@ class UserRepo : AbstractRepo<User>() {
         var session: Session? = null
         return try {
             session = sessionFactory!!.openSession()
-            val data = session!!.createQuery("FROM User WHERE deleted=FALSE", User::class.java).resultList
+            val data = session!!.createQuery("FROM User WHERE deleted=FALSE ORDER BY firstName", User::class.java).resultList
             data?.forEach {
                 it.password = null
                 it.username = null

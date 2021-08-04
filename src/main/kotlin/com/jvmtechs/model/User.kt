@@ -4,10 +4,10 @@ import org.hibernate.annotations.GenericGenerator
 import javax.persistence.*
 import org.hibernate.annotations.Parameter
 
-enum class UserGroup { Driver,Officer, Admin }
+enum class UserGroup { Driver, Officer, Admin }
 
 @Entity
-@Table(name="\"tblUsers\"")
+@Table(name = "\"tblUsers\"")
 class User {
 
     @GenericGenerator(
@@ -25,7 +25,7 @@ class User {
     var id: Int? = null
 
     @Column(name = "\"firstName\"", nullable = false)
-    var firstName : String? = null
+    var firstName: String? = null
 
     @Column(name = "\"lastName\"", nullable = false)
     var lastName: String? = null
@@ -40,6 +40,9 @@ class User {
 
     @Column(name = "\"password\"", nullable = true)
     var password: String? = null
+
+//    @ManyToMany(fetch = FetchType.EAGER, cascade = [CascadeType.ALL], mappedBy = "driversList")
+//    var jobList = mutableListOf<Job>()
 
     override fun toString(): String {
         return "$firstName $lastName"
